@@ -1,12 +1,12 @@
 import React, { useRef, useEffect, useContext, useState } from 'react';
 
 import { min, max, clamp } from '../../utils/math';
-import { roundedRect } from '../../utils/canvas';
+import { roundedRect, arrow } from '../../utils/canvas';
 import { zip } from '../../utils/array';
 
 import { CompilerContext } from '../../context';
 
-const Diagram = ({ data }) => {
+const Diagram = ({ data, paddingX=30, paddingY=30, fontSize=16, boxPadding=6 }) => {
 
     const canvasRef = useRef(null);
 
@@ -35,9 +35,8 @@ const Diagram = ({ data }) => {
         const deltaX = Math.max(1, maxX - minX);
         const deltaY = Math.max(1, maxY - minY);
 
-        const valueToXCoordinate = (val) => (val-minX)/deltaX*width;
-        const valueToYCoordinate = (val) => height - (val-minY)/deltaY*height;
-
+        const valueToXCoordinate = (val) => (val-minX)/deltaX*width * (width-2*paddingX) / width + paddingX;
+        const valueToYCoordinate = (val) => height - (val-minY)/deltaY*height * (height-2*paddingY) / height - paddingY;
 
         c.clearRect(0, 0, width, height);
 
@@ -46,6 +45,12 @@ const Diagram = ({ data }) => {
         c.fillStyle = '#000000';
         c.lineWidth = 2;
         c.setLineDash([]);
+
+        arrow(c, paddingX/4, height-paddingY, width-paddingX/4, height-paddingY);
+        arrow(c, paddingX, height-paddingY/4, paddingX, paddingY/4);
+
+        console.log('deltaX', deltaX.toExponential(0).split('+')[1]);
+        console.log('deltaY', deltaX.toExponential(0).split('+')[1]);
 
         for(const array of Object.values(filteredData)){
 
@@ -84,18 +89,40 @@ const Diagram = ({ data }) => {
                 ).index;
 
             c.beginPath();
-            c.font = '16px Arial';
+            c.font = `${fontSize}px Arial`;
 
-            
+            const boxHeight = boxPadding + (fontSize+boxPadding) * (Object.keys(filteredData).length + 1);
+            const boxWidth = 300;
+
             roundedRect(
                 c,
-                clamp(0, width-200)(getMouseX()), 
-                clamp(0, height-100)(getMouseY()-30), 
-                200, 
-                100, 
+                clamp(0, width-boxWidth)(getMouseX()), 
+                clamp(0, height-boxHeight)(getMouseY()-boxHeight*0.3), 
+                boxWidth, 
+                boxHeight, 
                 5, 
                 'rgba(128,128,128,0.7)'
                 );
+            
+            let dx = fontSize+boxPadding-2;
+
+            c.fillText(
+                `${context.xAxis ? context.xAxis : 'iterations'}: ${xAxis[nearestIndex] ? xAxis[nearestIndex] : 0}`, 
+                clamp(0, width-boxWidth)(getMouseX())+boxPadding, 
+                clamp(0, height-boxHeight)(getMouseY()-boxHeight*0.3) + dx);
+
+            dx += fontSize+boxPadding;
+
+            for(const key in filteredData){
+                
+                c.fillText(`${key}: ${filteredData[key][nearestIndex]}`, clamp(0, width-boxWidth)(getMouseX())+boxPadding, clamp(0, height-boxHeight)(getMouseY()-boxHeight*0.3) + dx);
+                dx += fontSize+boxPadding;
+
+                c.beginPath();
+                c.arc(valueToXCoordinate(xAxis[nearestIndex]), valueToYCoordinate(filteredData[key][nearestIndex]), 5, 0, 2 * Math.PI);
+                c.fill();
+
+            }
 
         }
 

@@ -4,7 +4,7 @@ const clamp = (min, max) => (value) =>
 const min = (obj) => {
     console.assert(typeof obj == 'object', 'Use Math.min instead');
 
-    if(typeof obj == 'object'){
+    if(typeof obj !== 'object'){
         return Math.min(...Object.values(obj))
     }
 
@@ -14,7 +14,7 @@ const min = (obj) => {
 const max = (obj) => {
     console.assert(typeof obj == 'object', 'Use Math.max instead');
 
-    if(typeof obj == 'object'){
+    if(typeof obj !== 'object'){
         return Math.max(...Object.values(obj))
     }
 
