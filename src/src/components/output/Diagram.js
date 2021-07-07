@@ -1,5 +1,9 @@
 import React, { useRef, useEffect, useContext, useState } from 'react';
 
+import { min, max, clamp } from '../../utils/math';
+import { roundedRect } from '../../utils/canvas';
+import { zip } from '../../utils/array';
+
 import { CompilerContext } from '../../context';
 
 const Diagram = ({ data }) => {
@@ -25,9 +29,6 @@ const Diagram = ({ data }) => {
 
         const xAxis = context.xAxis && Object.keys(context.initialVars).includes(context.xAxis) ? data[context.xAxis] : [...Array(dataLength).keys()];
 
-        const max = (obj) => Math.max(...[].concat(...Object.values(obj)));
-        const min = (obj) => Math.min(...[].concat(...Object.values(obj)));
-
         const [minX, maxX] = [Math.min(...xAxis), Math.max(...xAxis)];
         const [minY, maxY] = [min(filteredData), max(filteredData)];
 
@@ -35,10 +36,8 @@ const Diagram = ({ data }) => {
         const deltaY = Math.max(1, maxY - minY);
 
         const valueToXCoordinate = (val) => (val-minX)/deltaX*width;
-
         const valueToYCoordinate = (val) => height - (val-minY)/deltaY*height;
 
-        const zip = (a, b) => Array(Math.max(b.length, a.length)).fill().map((_,i) => [a[i], b[i]]);
 
         c.clearRect(0, 0, width, height);
 
@@ -62,6 +61,7 @@ const Diagram = ({ data }) => {
 
         if(mousePos.x != -1){
             const getMouseX = () => mousePos.x - canvas.getBoundingClientRect().left;
+            const getMouseY = () => mousePos.y - canvas.getBoundingClientRect().top;
 
             c.beginPath();
 
@@ -86,45 +86,16 @@ const Diagram = ({ data }) => {
             c.beginPath();
             c.font = '16px Arial';
 
-            const roundedRect = (x, y, w, h, radius, color='black') => {
-                c.beginPath();
-
-                const fillStyle = c.fillStyle;
-                c.fillStyle = color;
-
-                c.moveTo(x,y);
-                c.arcTo(x+w,y,x+w,y+h,radius);
-                c.arcTo(x+w,y+h,x,y+h,radius);
-                c.arcTo(x,y+h,x,y,radius);
-                c.arcTo(x,y,x+w,y,radius);
-
-                c.fill();
-                c.fillStyle = fillStyle;
-            }
-
-            const roundedRectBorder = (x, y, w, h, radius, borderThickness, borderColor='black', fillColor='white') => {
-                roundedRect(x, y, w, h, radius, borderColor);
-                roundedRect(x+borderThickness, y+borderThickness, w-2*borderThickness, h-2*borderThickness, radius-borderThickness, fillColor);
-            }
-
-            for(const key in filteredData){
-                c.arc(valueToXCoordinate(xAxis[nearestIndex]), valueToYCoordinate(filteredData[key][nearestIndex]), 5, 0, 2 * Math.PI);
-
-                const text = `${key} (${xAxis[nearestIndex]}, ${filteredData[key][nearestIndex]})`;
-                const textWidth = c.measureText(text).width;
-
-                const offsetX = valueToXCoordinate(xAxis[nearestIndex]) < width/2 ? 5 : -textWidth-5;
-
-                c.fillText(
-                    text, 
-                    valueToXCoordinate(xAxis[nearestIndex])+offsetX, 
-                    valueToYCoordinate(filteredData[key][nearestIndex])+10
-                    );
-            }
-
-            c.fill();
-
-            roundedRectBorder(20, 20, 200, 100, 7, 2);
+            
+            roundedRect(
+                c,
+                clamp(0, width-200)(getMouseX()), 
+                clamp(0, height-100)(getMouseY()-30), 
+                200, 
+                100, 
+                5, 
+                'rgba(128,128,128,0.7)'
+                );
 
         }
 
