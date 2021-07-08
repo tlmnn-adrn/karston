@@ -29,12 +29,27 @@ const InitialValues = () => {
 
     }
 
+    const changeColor = (e, key) => {
+
+        setContext({
+            ...context,
+            colors: {
+                ...context.colors,
+                [key]: e.target.value
+            }
+        });
+
+    }
+
     return (
         <table>
             <tbody>
                 {
                     Object.keys(context.initialVars).map((key) =>
                         <tr key={key}>
+                            <td>
+                                <input type='color' value={context.colors[key]} onChange={(e) => changeColor(e, key)}/>
+                            </td>
                             <td>
                                 {key}
                             </td>

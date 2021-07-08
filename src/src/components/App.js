@@ -19,6 +19,7 @@ const App = () => {
         iterations: 1000,
         xAxis: null,
         yAxis: {},
+        colors: {}
     });
 
     const [results, setResults] = useState({});
@@ -44,10 +45,14 @@ const App = () => {
         const yAxis = Object.keys(vars)
             .reduce((accumulator, key) => (accumulator[key] = key in context.yAxis ? context.yAxis[key] : false, accumulator), {});
 
+        const colors = Object.keys(vars)
+            .reduce((accumulator, key) => (accumulator[key] = key in context.colors ? context.colors[key] : '#000000', accumulator), {});
+
         setContext({
             ...context,
             initialVars: initialVars,
-            yAxis: yAxis
+            yAxis: yAxis,
+            colors: colors
         })
     }, [context.code]);
 

@@ -88,7 +88,13 @@ const Diagram = ({ data, paddingX = 90, paddingY = 50, fontSize = 16, boxPadding
 
         });
 
-        for (const array of Object.values(filteredData)) {
+        c.save();
+        
+        for (const key in filteredData) {
+
+            const array = filteredData[key];
+
+            c.strokeStyle = context.colors[key];
 
             c.moveTo(valueToXCoordinate(xAxis[0]), valueToYCoordinate(array[0]));
 
@@ -96,9 +102,11 @@ const Diagram = ({ data, paddingX = 90, paddingY = 50, fontSize = 16, boxPadding
                 c.lineTo(valueToXCoordinate(point[0]), valueToYCoordinate(point[1]));
             }
 
+
         }
 
         c.stroke();
+        c.restore();
 
         if (mousePos.x != -1) {
             const getMouseX = () => mousePos.x - canvas.getBoundingClientRect().left;
