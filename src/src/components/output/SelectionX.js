@@ -15,7 +15,7 @@ const SelectionX = () => {
 
     useEffect(() => {
 
-        if(context.xAxis && !Object.keys(context.initialVars).includes(context.xAxis)){
+        if (context.xAxis && !Object.keys(context.initialVars).includes(context.xAxis)) {
             setContext({
                 ...context,
                 xAxis: null
@@ -29,7 +29,7 @@ const SelectionX = () => {
             <option value={null}>iterations</option>
             {
                 Object.keys(context.initialVars).map((key) => (
-                    <option value={key} key={'select-x-'+key}>
+                    <option value={key} key={'select-x-' + key}>
                         {key}
                     </option>
                 ))

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import Text from './input/Text';
 import InitialValues from './input/InitialValues';
-import Iterations  from './input/Iterations';
+import Iterations from './input/Iterations';
 import Diagram from './output/Diagram';
 import SelectionX from './output/SelectionX';
 
@@ -29,20 +29,20 @@ const App = () => {
 
         let vars = context.initialVars;
 
-        try{
+        try {
 
             parser.feed(context.code);
             const ast = parser.results;
             vars = ast[0].register_vars({});
 
-        }catch(err){
+        } catch (err) {
         }
 
         const initialVars = Object.keys(vars)
-                                    .reduce( (accumulator, key) => (accumulator[key] = key in context.initialVars ? context.initialVars[key] : 0, accumulator), {} );
-        
+            .reduce((accumulator, key) => (accumulator[key] = key in context.initialVars ? context.initialVars[key] : 0, accumulator), {});
+
         const yAxis = Object.keys(vars)
-                                    .reduce( (accumulator, key) => (accumulator[key] = key in context.yAxis ? context.yAxis[key] : false, accumulator), {} );
+            .reduce((accumulator, key) => (accumulator[key] = key in context.yAxis ? context.yAxis[key] : false, accumulator), {});
 
         setContext({
             ...context,
@@ -52,18 +52,18 @@ const App = () => {
     }, [context.code]);
 
     useEffect(() => {
-        try{
+        try {
 
             parser.feed(context.code);
             const ast = parser.results[0];
-    
+
             let vars = Object.assign({}, context.initialVars);
 
-            
+
             const newResults = Object.keys(vars)
-                                        .reduce( (accumulator, key) => (accumulator[key] = [], accumulator), {} );
-    
-            for(let i=0; i<context.iterations; i++){
+                .reduce((accumulator, key) => (accumulator[key] = [], accumulator), {});
+
+            for (let i = 0; i < context.iterations; i++) {
                 ast.run(vars);
 
                 for (const key in vars) {
@@ -73,7 +73,7 @@ const App = () => {
 
             setResults(newResults);
 
-        }catch(err){
+        } catch (err) {
         }
 
     }, [context]);

@@ -33,7 +33,7 @@ const InitialValues = () => {
         <table>
             <tbody>
                 {
-                    Object.keys(context.initialVars).map((key) => 
+                    Object.keys(context.initialVars).map((key) =>
                         <tr key={key}>
                             <td>
                                 {key}
@@ -42,7 +42,7 @@ const InitialValues = () => {
                                 <input type='number' value={context.initialVars[key]} onChange={(e) => changeInitialValue(e, key)} />
                             </td>
                             <td>
-                                <input type='checkbox' checked={context.yAxis[key]} onChange={(e) => toggleYAxis(e, key)}/>
+                                <input type='checkbox' checked={context.yAxis[key]} onChange={(e) => toggleYAxis(e, key)} />
                             </td>
                         </tr>
                     )

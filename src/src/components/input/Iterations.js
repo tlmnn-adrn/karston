@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 
 import { CompilerContext } from '../../context';
 
@@ -15,8 +15,8 @@ const Iterations = () => {
 
     return (
         <>
-            Repeat 
-            <input type='number' value={context.iterations} onChange={onChange}/>
+            Repeat
+            <input type='number' value={context.iterations} onChange={onChange} />
             Times
         </>
     );

@@ -1,22 +1,22 @@
-const roundedRect = (c, x, y, w, h, radius, color='black') => {
+const roundedRect = (c, x, y, w, h, radius, color = 'black') => {
     c.save();
     c.beginPath();
 
     const fillStyle = c.fillStyle;
     c.fillStyle = color;
 
-    c.moveTo(x,y);
-    c.arcTo(x+w,y,x+w,y+h,radius);
-    c.arcTo(x+w,y+h,x,y+h,radius);
-    c.arcTo(x,y+h,x,y,radius);
-    c.arcTo(x,y,x+w,y,radius);
+    c.moveTo(x, y);
+    c.arcTo(x + w, y, x + w, y + h, radius);
+    c.arcTo(x + w, y + h, x, y + h, radius);
+    c.arcTo(x, y + h, x, y, radius);
+    c.arcTo(x, y, x + w, y, radius);
 
     c.fill();
     c.fillStyle = fillStyle;
     c.restore();
 }
 
-const arrow = (c, fromx, fromy, tox, toy, lineWidth=2.5, headlen=13) => {
+const arrow = (c, fromx, fromy, tox, toy, lineWidth = 2.5, headlen = 13) => {
 
     c.save();
 

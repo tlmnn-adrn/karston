@@ -1,11 +1,11 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 
 import { CompilerContext } from '../../context';
 
 
 const Text = () => {
 
-    const [context, setContext] = useContext(CompilerContext); 
+    const [context, setContext] = useContext(CompilerContext);
 
     const onChange = (e) => {
 
