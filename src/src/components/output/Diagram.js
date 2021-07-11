@@ -92,6 +92,8 @@ const Diagram = ({ data, paddingX = 90, paddingY = 50, fontSize = 16, boxPadding
         
         for (const key in filteredData) {
 
+            c.beginPath();
+
             const array = filteredData[key];
 
             c.strokeStyle = context.colors[key];
@@ -101,27 +103,15 @@ const Diagram = ({ data, paddingX = 90, paddingY = 50, fontSize = 16, boxPadding
             for (const point of zip(xAxis, array)) {
                 c.lineTo(valueToXCoordinate(point[0]), valueToYCoordinate(point[1]));
             }
-
+            c.stroke();
 
         }
 
-        c.stroke();
         c.restore();
 
         if (mousePos.x != -1) {
             const getMouseX = () => mousePos.x - canvas.getBoundingClientRect().left;
             const getMouseY = () => mousePos.y - canvas.getBoundingClientRect().top;
-
-            c.beginPath();
-
-            c.fillStyle = '#000000';
-            c.lineWidth = 2;
-            c.setLineDash([2, 2]);
-
-            c.moveTo(getMouseX(), 0);
-            c.lineTo(getMouseX(), height);
-
-            c.stroke();
 
             const nearestIndex = xAxis.reduce(
                 (accumulator, value, index) =>
@@ -132,39 +122,31 @@ const Diagram = ({ data, paddingX = 90, paddingY = 50, fontSize = 16, boxPadding
                 { min: Math.abs(valueToXCoordinate(xAxis[0]) - getMouseX()), index: xAxis[0] }
             ).index;
 
-            c.beginPath();
+            const nearestGraph = Object.values(filteredData).reduce(
+                (accumulator, value, index) => (
+                    Math.abs(valueToYCoordinate(value[nearestIndex]) - getMouseY()) < accumulator.min ? accumulator = { min:  Math.abs(valueToYCoordinate(value[nearestIndex]) - getMouseY()), index: index} : null,
+                    accumulator
+                ),
+                {min: Infinity, index: -1}
+            ).index;
 
-            const boxHeight = boxPadding + (fontSize + boxPadding) * (Object.keys(filteredData).length + 1);
-            const boxWidth = 300;
+            const nearestPair = [
+                valueToXCoordinate(xAxis[nearestIndex]),
+                nearestGraph >= 0 ? valueToYCoordinate(Object.values(filteredData)[nearestGraph][nearestIndex]) : Infinity
+            ];
 
-            roundedRect(
-                c,
-                clamp(0, width - boxWidth)(getMouseX()),
-                clamp(0, height - boxHeight)(getMouseY() - boxHeight * 0.3),
-                boxWidth,
-                boxHeight,
-                5,
-                'rgba(128,128,128,0.7)'
-            );
-
-            let dx = fontSize + boxPadding - 2;
-
-            c.fillText(
-                `${context.xAxis ? context.xAxis : 'iterations'}: ${xAxis[nearestIndex] ? xAxis[nearestIndex] : 0}`,
-                clamp(0, width - boxWidth)(getMouseX()) + boxPadding,
-                clamp(0, height - boxHeight)(getMouseY() - boxHeight * 0.3) + dx);
-
-            dx += fontSize + boxPadding;
-
-            for (const key in filteredData) {
-
-                c.fillText(`${key}: ${filteredData[key][nearestIndex]}`, clamp(0, width - boxWidth)(getMouseX()) + boxPadding, clamp(0, height - boxHeight)(getMouseY() - boxHeight * 0.3) + dx);
-                dx += fontSize + boxPadding;
-
+            if(Math.sqrt((nearestPair[0]-getMouseX())**2+(nearestPair[1]-getMouseY())**2) < 10){
                 c.beginPath();
-                c.arc(valueToXCoordinate(xAxis[nearestIndex]), valueToYCoordinate(filteredData[key][nearestIndex]), 5, 0, 2 * Math.PI);
+                c.arc(
+                    nearestPair[0],
+                    nearestPair[1],
+                    5,
+                    0,
+                    2*Math.PI
+                )
                 c.fill();
 
+                c.fillText(`(${xAxis[nearestIndex]}, ${Object.values(filteredData)[nearestGraph][nearestIndex]})`, nearestPair[0]+5, nearestPair[1]+5);
             }
 
         }
