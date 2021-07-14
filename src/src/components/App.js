@@ -11,6 +11,8 @@ import { CompilerContext } from '../context';
 import { Parser, Grammar } from 'nearley';
 import grammar from '../compiler/grammar.ne';
 
+import '../../css/layout.css';
+
 const App = () => {
 
     const [context, setContext] = useState({
@@ -85,15 +87,21 @@ const App = () => {
 
     return (
         <CompilerContext.Provider value={[context, setContext]}>
-            <Iterations />
-            <br />
-            <Text />
-            <br />
-            <InitialValues />
-            <br />
-            <Diagram data={results} />
-            <br />
-            <SelectionX />
+            <div className='grid-container'>
+                <div className='text-editor-item'>
+                    <Iterations />
+                    <br />
+                    <Text />
+                </div>
+                <div className='graph-output-item'>
+                    <Diagram data={results} />
+                </div>
+                <div className='initial-values-item'>
+                    <SelectionX />
+                    <br />
+                    <InitialValues />
+                </div>
+            </div>
         </CompilerContext.Provider>
     );
 };

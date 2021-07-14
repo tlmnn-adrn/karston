@@ -18,14 +18,14 @@ const Text = () => {
 
     return (
         <Editor
-        value={context.code}
-        onValueChange={(code) => onChange(code)}
-        highlight={() => <TextHighlighter code={context.code} />}
-        padding={10}
-        style={{
-          fontFamily: '"Fira code", "Fira Mono", monospace',
-          fontSize: 12
-        }}
+            value={context.code}
+            onValueChange={(code) => onChange(code)}
+            highlight={() => <TextHighlighter code={context.code} />}
+            padding={10}
+            style={{
+            fontFamily: '"Fira code", "Fira Mono", monospace',
+            fontSize: 12
+            }}
       />
     )
 }

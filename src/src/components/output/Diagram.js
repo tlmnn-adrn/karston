@@ -6,7 +6,7 @@ import { zip } from '../../utils/array';
 
 import { CompilerContext } from '../../context';
 
-const Diagram = ({ data, paddingX = 90, paddingY = 50, fontSize = 16, boxPadding = 6 }) => {
+const Diagram = ({ data, paddingX = 90, paddingY = 50, fontSize = 16, lineWidth=2.5}) => {
 
     const canvasRef = useRef(null);
 
@@ -21,11 +21,12 @@ const Diagram = ({ data, paddingX = 90, paddingY = 50, fontSize = 16, boxPadding
 
         c.font = `${fontSize}px Arial`;
         c.fillStyle = '#000000';
-        c.lineWidth = 2;
-        c.setLineDash([]);
+        c.lineWidth = lineWidth;
 
-        const width = canvas.width;
-        const height = canvas.height;
+        const width = window.innerWidth / 2;
+        const height = window.innerHeight / 2;
+        canvas.width = width;
+        canvas.height = height;
 
         const filteredData = Object.keys(data)
             .reduce((accumulator, key) => (context.yAxis[key] && (accumulator[key] = data[key]), accumulator), {});
@@ -56,7 +57,7 @@ const Diagram = ({ data, paddingX = 90, paddingY = 50, fontSize = 16, boxPadding
 
         const xAxisY = clamp(paddingY, height - paddingY)(valueToYCoordinate(0)) == valueToYCoordinate(0) ? valueToYCoordinate(0) : height - paddingY;
 
-        arrow(c, paddingX, xAxisY, width - paddingX / 2, xAxisY);
+        arrow(c, paddingX, xAxisY, width - paddingX / 2, xAxisY, lineWidth);
 
         intervalX.forEach((value) => {
 
@@ -73,7 +74,7 @@ const Diagram = ({ data, paddingX = 90, paddingY = 50, fontSize = 16, boxPadding
 
         const yAxisX = clamp(paddingX, width - paddingX)(valueToXCoordinate(0)) == valueToXCoordinate(0) ? valueToXCoordinate(0) : paddingX;
 
-        arrow(c, yAxisX, height - paddingY, yAxisX, paddingY / 2);
+        arrow(c, yAxisX, height - paddingY, yAxisX, paddingY / 2, lineWidth);
 
         intervalY.forEach((value) => {
 
@@ -163,7 +164,7 @@ const Diagram = ({ data, paddingX = 90, paddingY = 50, fontSize = 16, boxPadding
     const onMouseLeave = () => setMousePos({ x: -1, y: -1 });
 
     return (
-        <canvas ref={canvasRef} width="1200" height="600" onMouseMove={onMouseMove} onMouseLeave={onMouseLeave}>
+        <canvas ref={canvasRef} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave}>
         </canvas>
     );
 
