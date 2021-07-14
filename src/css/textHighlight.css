@@ -1,0 +1,23 @@
+pre{
+    color: #808080;
+}
+
+.token-identifier{
+    color:rgb(0, 247, 255);
+    font-weight: bold;
+}
+
+.token-number{
+    color: #6000E0; 
+    font-weight: bold;
+}
+
+.token-operator{
+    color: #303030;
+    font-weight: bold;
+}
+
+.token-punctuation{
+    color: #d3c500;
+    font-weight: bold;
+}
