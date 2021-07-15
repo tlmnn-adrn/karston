@@ -23,8 +23,9 @@ const Text = () => {
             highlight={() => <TextHighlighter code={context.code} />}
             padding={10}
             style={{
-            fontFamily: '"Fira code", "Fira Mono", monospace',
-            fontSize: 12
+                fontFamily: '"Fira code", "Fira Mono", monospace',
+                fontSize: 12,
+                height: '100%'
             }}
       />
     )
