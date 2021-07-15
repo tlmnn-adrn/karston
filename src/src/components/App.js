@@ -21,7 +21,8 @@ const App = () => {
         iterations: 1000,
         xAxis: null,
         yAxis: {},
-        colors: {}
+        colors: {},
+        showLargeDiagram: true
     });
 
     const [results, setResults] = useState({});
@@ -90,7 +91,6 @@ const App = () => {
             <div className='grid-container'>
                 <div className='text-editor-item'>
                     <Iterations />
-                    <br />
                     <Text />
                 </div>
                 <div className='graph-output-item'>

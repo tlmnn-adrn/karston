@@ -14,11 +14,11 @@ const Iterations = () => {
     }
 
     return (
-        <>
+        <div className='iterations-selector'>
             Repeat
             <input type='number' value={context.iterations} onChange={onChange} />
             Times
-        </>
+        </div>
     );
 
 }

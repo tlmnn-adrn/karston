@@ -22,11 +22,7 @@ const Text = () => {
             onValueChange={(code) => onChange(code)}
             highlight={() => <TextHighlighter code={context.code} />}
             padding={10}
-            style={{
-                fontFamily: '"Fira code", "Fira Mono", monospace',
-                fontSize: 12,
-                height: '100%'
-            }}
+            className='text-editor'
       />
     )
 }
