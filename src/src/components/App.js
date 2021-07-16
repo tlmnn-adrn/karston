@@ -12,6 +12,7 @@ import { Parser, Grammar } from 'nearley';
 import grammar from '../compiler/grammar.ne';
 
 import '../../css/layout.css';
+import '../../css/style.css';
 
 const App = () => {
 
@@ -102,6 +103,13 @@ const App = () => {
                     <InitialValues />
                 </div>
             </div>
+            {
+                context.showLargeDiagram && (
+                    <div className='overlay'>
+                        <Diagram data={results}/>
+                    </div>
+                )
+            }
         </CompilerContext.Provider>
     );
 };

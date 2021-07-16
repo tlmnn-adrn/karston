@@ -14,20 +14,28 @@ const Diagram = ({ data, paddingX = 90, paddingY = 50, fontSize = 16, lineWidth=
 
     const [mousePos, setMousePos] = useState(0);
 
+    const getCanvasSizeAndResize = (canvas) => {
+        const width = canvas.clientWidth;
+        const height = canvas.clientHeight;
+
+        canvas.width = width;
+        canvas.height = height;
+
+        return [width, height];
+    } 
+
     useEffect(() => {
 
         const draw = () => {
             const canvas = canvasRef.current;
+
+            const [width, height] = getCanvasSizeAndResize(canvas);
+
             const c = canvas.getContext('2d');
     
             c.font = `${fontSize}px Arial`;
             c.fillStyle = '#000000';
             c.lineWidth = lineWidth;
-    
-            const width = window.innerWidth / 2;
-            const height = window.innerHeight / 2;
-            canvas.width = width;
-            canvas.height = height;
     
             const filteredData = Object.keys(data)
                 .reduce((accumulator, key) => (context.yAxis[key] && (accumulator[key] = data[key]), accumulator), {});
@@ -173,7 +181,7 @@ const Diagram = ({ data, paddingX = 90, paddingY = 50, fontSize = 16, lineWidth=
     const onMouseLeave = () => setMousePos({ x: -1, y: -1 });
 
     return (
-        <canvas ref={canvasRef} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave}>
+        <canvas ref={canvasRef} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave} onClick={() => setContext({...context, showLargeDiagram: !context.showLargeDiagram})}>
         </canvas>
     );
 
