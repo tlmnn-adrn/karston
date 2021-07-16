@@ -56,3 +56,16 @@
 
     background-color: white;
 }
+
+.overlay canvas{
+    width: 100%;
+    height: calc(100%-2rem);
+    display: block;
+}
+
+.overlay .minimize{
+    width: fit-content;
+    float: right;
+    cursor: pointer;
+    /* height: 2rem; */
+}

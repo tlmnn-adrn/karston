@@ -5,6 +5,7 @@ import InitialValues from './input/InitialValues';
 import Iterations from './input/Iterations';
 import Diagram from './output/Diagram';
 import SelectionX from './output/SelectionX';
+import OverlayDiagram from './output/OverlayDiagram';
 
 import { CompilerContext } from '../context';
 
@@ -23,7 +24,7 @@ const App = () => {
         xAxis: null,
         yAxis: {},
         colors: {},
-        showLargeDiagram: true
+        showLargeDiagram: false
     });
 
     const [results, setResults] = useState({});
@@ -87,6 +88,8 @@ const App = () => {
 
     }, [context]);
 
+    const setDiagramFullscreen = () => setContext({...context, showLargeDiagram: !context.showLargeDiagram});
+
     return (
         <CompilerContext.Provider value={[context, setContext]}>
             <div className='grid-container'>
@@ -94,7 +97,7 @@ const App = () => {
                     <Iterations />
                     <Text />
                 </div>
-                <div className='graph-output-item'>
+                <div className='graph-output-item' onClick={setDiagramFullscreen}>
                     <Diagram data={results} />
                 </div>
                 <div className='initial-values-item'>
@@ -105,9 +108,7 @@ const App = () => {
             </div>
             {
                 context.showLargeDiagram && (
-                    <div className='overlay'>
-                        <Diagram data={results}/>
-                    </div>
+                    <OverlayDiagram results={results}/>
                 )
             }
         </CompilerContext.Provider>

@@ -181,7 +181,7 @@ const Diagram = ({ data, paddingX = 90, paddingY = 50, fontSize = 16, lineWidth=
     const onMouseLeave = () => setMousePos({ x: -1, y: -1 });
 
     return (
-        <canvas ref={canvasRef} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave} onClick={() => setContext({...context, showLargeDiagram: !context.showLargeDiagram})}>
+        <canvas ref={canvasRef} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave}>
         </canvas>
     );
 

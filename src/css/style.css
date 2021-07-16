@@ -1,3 +1,7 @@
+.graph-output-item canvas{
+    cursor: pointer;
+}
+
 .text-editor{
     font-family: "Fira code", "Fira Mono", "monospace";
     font-size: 12px;
